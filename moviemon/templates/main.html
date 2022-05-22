@@ -1,14 +1,49 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>MovieMon</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div><a href="/worldmap/">New game</a></div>
-<div><a href="/load_game/">Load game</a></div>
+    <div class="nav">
+        <div class="nav_title">MovieMon</div>
+    </div>
+    <div class="game">
+        <div class="panel">
+            <div class="panel_ab_buttons">
+                <button class="a_button">
+                    <div class="button_name">A</div>
+                </button>
+                <button class="b_button">
+                    <div class="button_name">B</div>
+                </button>
+            </div>
+            <div class="panel_nav_buttons">
+                <div class="nav_button_wrapper">
+                    <button class="nav_button">UP</button>
+                </div>
+                <div class="nav_button_wrapper">
+                    <button class="nav_button">LEFT</button>
+                    <button class="nav_button">RIGHT</button>
+                </div>
+                <div class="nav_button_wrapper">
+                    <button class="nav_button">DOWN</button>
+                </div>
+            </div>
+            <div class="panel_nav_buttons">
+               <div class="nav_button_wrapper">
+                <button class="other_button">SELECT</button>
+                </div>
+                <div class="nav_button_wrapper">
+                <button class="other_button">START</button>
+                </div>
+            </div>
+        </div>
+        <div class="start_panel">
+            <button class="start_button">START NEW GAME</button>
+            <button class="start_button">LOAD GAME</button>
+        </div>
+    </div>
 </body>
 </html>
