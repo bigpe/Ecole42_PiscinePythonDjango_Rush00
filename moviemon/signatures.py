@@ -136,7 +136,7 @@ class GameData:
 
 class Game:
     def __init__(self, game_data):
-        self.game_data = game_data
+        self.game_data: GameData = game_data
 
     def move_left(self):
         y, x = self.game_data.position
@@ -144,13 +144,15 @@ class Game:
             self.game_data.map[y][x] = Tile(type=Tile.Types.empty)
             self.game_data.map[y][x - 1] = Tile(type=Tile.Types.player)
             self.game_data.position = (y, x - 1)
+            self.game_data.dump('session')
 
     def move_right(self):
         y, x = self.game_data.position
-        if x != settings.MAP_SIZE:
+        if x != settings.MAP_SIZE - 1:
             self.game_data.map[y][x] = Tile(type=Tile.Types.empty)
             self.game_data.map[y][x + 1] = Tile(type=Tile.Types.player)
             self.game_data.position = (y, x + 1)
+            self.game_data.dump('session')
 
     def move_up(self):
         y, x = self.game_data.position
@@ -158,10 +160,12 @@ class Game:
             self.game_data.map[y][x] = Tile(type=Tile.Types.empty)
             self.game_data.map[y - 1][x] = Tile(type=Tile.Types.player)
             self.game_data.position = (y - 1, x)
+            self.game_data.dump('session')
 
     def move_down(self):
         y, x = self.game_data.position
-        if y != settings.MAP_SIZE:
+        if y != settings.MAP_SIZE - 1:
             self.game_data.map[y][x] = Tile(type=Tile.Types.empty)
             self.game_data.map[y + 1][x] = Tile(type=Tile.Types.player)
             self.game_data.position = (y + 1, x)
+            self.game_data.dump('session')

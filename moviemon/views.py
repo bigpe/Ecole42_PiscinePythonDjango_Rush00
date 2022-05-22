@@ -23,4 +23,5 @@ class WorldMap(TemplateView):
         if move:
             getattr(game, f'move_{move}', lambda: ...)()
         self.context.update(game_data.to_data())
+        self.context.update({'player_position': game_data.position})
         return render(request, self.template_name, self.context)
