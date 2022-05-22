@@ -1,10 +1,67 @@
-<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
 
+<body>
+    <div class="nav">
+        <div class="nav_title">MovieMon</div>
+    </div>
+    <div class="game">
+        <div class="panel">
+            <div class="panel_ab_buttons">
+                <button class="a_button">
+                    <div class="button_name">A</div>
+                </button>
+                <button class="b_button">
+                    <div class="button_name">B</div>
+                </button>
+            </div>
+            <div class="panel_nav_buttons">
+                <div class="nav_button_wrapper">
+                    <button class="nav_button">UP</button>
+                </div>
+                <div class="nav_button_wrapper">
+                    <button class="nav_button">LEFT</button>
+                    <button class="nav_button">RIGHT</button>
+                </div>
+                <div class="nav_button_wrapper">
+                    <button class="nav_button">DOWN</button>
+                </div>
+            </div>
+            <div class="panel_nav_buttons">
+               <div class="nav_button_wrapper">
+                <button class="other_button">SELECT</button>
+                </div>
+                <div class="nav_button_wrapper">
+                <button class="other_button">START</button>
+                </div>
+            </div>
+        </div>
+        <div class="game_field">
+            <table>
+                {% for y_map in map %}
+                <tr>
+                    {% for x_map in y_map %}
+                        <td>
+                            {% if x_map == 'player' %}
+                                P
+                            {% endif %}
+                            {% if x_map == 'ball' or x_map == 'enemy' %}
+                                ?
+                            {% endif %}
+                            {% if x_map == 'empty' %}
+
+                        </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
 </body>
+
 </html>
