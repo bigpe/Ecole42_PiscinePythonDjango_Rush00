@@ -160,6 +160,7 @@ class Game:
         self.game_data: GameData = game_data
 
     def move(self, to_y=0, to_x=0):
+        move_on = None
         y, x = self.game_data.position
         if y + to_y < 0 or x + to_x < 0:
             return
@@ -175,16 +176,17 @@ class Game:
             if not self.game_data.moves_count % 5:
                 self.game_data.restore_tile()
         except IndexError:
-            return None
+            ...
+        return move_on
 
     def move_left(self):
-        self.move(to_x=-1)
+        return self.move(to_x=-1)
 
     def move_right(self):
-        self.move(to_x=1)
+        return self.move(to_x=1)
 
     def move_up(self):
-        self.move(to_y=-1)
+        return self.move(to_y=-1)
 
     def move_down(self):
-        self.move(to_y=1)
+        return self.move(to_y=1)
