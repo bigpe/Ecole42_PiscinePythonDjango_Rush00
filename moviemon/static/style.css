@@ -131,10 +131,14 @@ td {
 }
 
 .nav_button {
-    padding: 8px;
     width: 70px;
     border-radius: 10px;
     border-color: white;
+    padding: 8px;
+}
+
+.nav_button a {
+    padding: 8px;
 }
 
 .other_button {

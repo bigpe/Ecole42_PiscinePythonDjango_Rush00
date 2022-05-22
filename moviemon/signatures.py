@@ -1,3 +1,4 @@
+import glob
 import pickle
 import random
 from dataclasses import dataclass, field
@@ -131,6 +132,21 @@ class GameData:
             return self.restore_tile()
         self.map[random_y][random_x] = random.choice([Tile(Tile.Types.ball), Tile(Tile.Types.enemy)])
         self.dump('session')
+
+    def get_slots(self):
+        slots = [slot.split('/')[-1] for slot in glob.glob(str(self.save_path('session').parent / 'slot-*.bin'))]
+        slots = list(filter(lambda slot: 'session' not in slot, slots))
+        slots_ids = [slot.replace('slot-', '').replace('.bin', '') for slot in slots]
+        slots = {
+            '1': {'number': 1, 'progress': None},
+            '2': {'number': 2, 'progress': None},
+            '3': {'number': 3, 'progress': None},
+        }
+        for slot in slots_ids:
+            slot_data: GameData = self.load(slot)
+            slots[slot]['progress'] = f'{len(slot_data.moviemons)/len(slot_data.captured)}'
+        slots = [slots[slot] for slot in slots]
+        return slots
 
     def to_data(self):
         return {

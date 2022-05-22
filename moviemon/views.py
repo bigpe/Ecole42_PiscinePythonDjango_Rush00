@@ -38,3 +38,13 @@ class WorldMap(TemplateView):
                 # TODO Redirect battle
         self.context.update(game_data.to_data())
         return render(request, self.template_name, self.context)
+
+
+class Load(TemplateView):
+    template_name = "load.html"
+    context = {}
+
+    @get_game
+    def get(self, request, game: Game, *args, **kwargs):
+        self.context.update({'slots': game.game_data.get_slots()})
+        return render(request, self.template_name, self.context)
