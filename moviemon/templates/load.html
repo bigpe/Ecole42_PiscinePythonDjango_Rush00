@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>MovieMon</title>
-    <link rel="stylesheet" href="static/style.css">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="nav">
@@ -33,16 +33,21 @@
             </div>
             <div class="panel_nav_buttons">
                <div class="nav_button_wrapper">
-                <button class="other_button">SELECT</button>
+                <button class="other_button select">SELECT</button>
                 </div>
                 <div class="nav_button_wrapper">
-                <button class="other_button">START</button>
+                <button class="other_button start">START</button>
                 </div>
             </div>
         </div>
         <div class="start_panel">
-            <button class="start_button"><a href="/worldmap/">START NEW GAME</a>E</button>
-            <button class="start_button"><a href="/load">LOAD GAME</a></button>
+            {% for slot in slots %}
+                {% if slot %}
+                    <button class="save_game_button"><a href="/worldmap/?slot={{ slot.number }}">{{ slot.number }} ({{ slot.progress }})</a></button>
+                {% else %}
+                    <button class="save_game_button"> - </button>
+                {% endif %}
+            {% endfor %}
         </div>
     </div>
 </body>
