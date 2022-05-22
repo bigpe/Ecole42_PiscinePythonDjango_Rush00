@@ -68,6 +68,7 @@ class GameData:
     captured: List[str] = field(default_factory=list)
     movie_balls: int = settings.PLAYER_START_MOVIE_BALLS
     map: List[List[Tile]] = field(default_factory=list)
+    moves_count = 0
 
     def load(self, slot):
         try:
@@ -106,7 +107,6 @@ class GameData:
 
     def generate_map(self):
         map_size = settings.MAP_SIZE
-        # map_size = 10
         for i in range(map_size):
             tiles = []
             for j in range(map_size):
@@ -116,15 +116,20 @@ class GameData:
             self.map.append(tiles)
 
     def load_movies(self):
-        # IMDB_LIST = [
-        #     "tt0468492",
-        #     "tt5034838",
-        # ]
         imdb_list = settings.IMDB_LIST
 
         self.moviemons = [Moviemon(**API().search(imdb_id)) for imdb_id in imdb_list]
 
     def create_session(self):
+        self.dump('session')
+
+    def restore_tile(self, x=None, y=None):
+        random_y = random.randint(0, settings.MAP_SIZE - 1) if y is None else y
+        random_x = random.randint(0, settings.MAP_SIZE - 1) if x is None else x
+
+        if self.map[random_y][random_x].type != Tile.Types.empty:
+            return self.restore_tile()
+        self.map[random_y][random_x] = random.choice([Tile(Tile.Types.ball), Tile(Tile.Types.enemy)])
         self.dump('session')
 
     def to_data(self):
@@ -138,34 +143,32 @@ class Game:
     def __init__(self, game_data):
         self.game_data: GameData = game_data
 
-    def move_left(self):
+    def move(self, to_y=0, to_x=0):
         y, x = self.game_data.position
-        if x:
+        if y + to_y < 0 or x + to_x < 0:
+            return
+        try:
+            move_on = self.game_data.map[y + to_y][x + to_x].type
+            if move_on == Tile.Types.ball:
+                self.game_data.movie_balls += 1
+            self.game_data.map[y + to_y][x + to_x] = Tile(type=Tile.Types.player)
             self.game_data.map[y][x] = Tile(type=Tile.Types.empty)
-            self.game_data.map[y][x - 1] = Tile(type=Tile.Types.player)
-            self.game_data.position = (y, x - 1)
+            self.game_data.position = (y + to_y, x + to_x)
+            self.game_data.moves_count += 1
             self.game_data.dump('session')
+            if not self.game_data.moves_count % 5:
+                self.game_data.restore_tile()
+        except IndexError:
+            return None
+
+    def move_left(self):
+        self.move(to_x=-1)
 
     def move_right(self):
-        y, x = self.game_data.position
-        if x != settings.MAP_SIZE - 1:
-            self.game_data.map[y][x] = Tile(type=Tile.Types.empty)
-            self.game_data.map[y][x + 1] = Tile(type=Tile.Types.player)
-            self.game_data.position = (y, x + 1)
-            self.game_data.dump('session')
+        self.move(to_x=1)
 
     def move_up(self):
-        y, x = self.game_data.position
-        if y:
-            self.game_data.map[y][x] = Tile(type=Tile.Types.empty)
-            self.game_data.map[y - 1][x] = Tile(type=Tile.Types.player)
-            self.game_data.position = (y - 1, x)
-            self.game_data.dump('session')
+        self.move(to_y=-1)
 
     def move_down(self):
-        y, x = self.game_data.position
-        if y != settings.MAP_SIZE - 1:
-            self.game_data.map[y][x] = Tile(type=Tile.Types.empty)
-            self.game_data.map[y + 1][x] = Tile(type=Tile.Types.player)
-            self.game_data.position = (y + 1, x)
-            self.game_data.dump('session')
+        self.move(to_y=1)
