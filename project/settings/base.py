@@ -107,3 +107,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 INSTALLED_APPS += ['moviemon']
 
 ROOT_URLCONF = 'moviemon.urls'
+
+STATIC_ROOT = BASE_DIR.parent / 'static'
