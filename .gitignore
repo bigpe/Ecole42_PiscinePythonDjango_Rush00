@@ -2,3 +2,4 @@ db.sqlite3
 saved_data
 static
 !moviemon/static
+.idea
