@@ -23,13 +23,6 @@ class Main(TemplateView):
         return render(request, self.template_name)
 
 
-class Select(TemplateView):
-    template_name = "select.html"
-    
-    def get(self, request, *args, **kwargs):
-        return render(request, self.template_name)
-
-
 class WorldMap(TemplateView):
     template_name = "worldmap.html"
     context = {}
@@ -38,10 +31,42 @@ class WorldMap(TemplateView):
     def get(self, request, game: Game, *args, **kwargs):
         move = request.GET.get('move', None)
         game_data: GameData = game.game_data
+        move_on = None
         if move:
             move_on = getattr(game, f'move_{move}', lambda: ...)()
-            if move_on == Tile.Types.enemy:
-                ...
-                # TODO Redirect battle
         self.context.update(game_data.to_data())
+        self.context.update({
+            'is_enemy': True if move_on == Tile.Types.enemy else False,
+        })
+        if self.context['is_enemy']:
+            self.context.update({'enemy': game_data.get_random_movie().to_data()})
         return render(request, self.template_name, self.context)
+
+
+class Load(TemplateView):
+    template_name = "load.html"
+    context = {}
+
+    @get_game
+    def get(self, request, game: Game, *args, **kwargs):
+        self.context.update({'slots': game.game_data.get_slots()})
+        return render(request, self.template_name, self.context)
+
+
+class Battle(TemplateView):
+    template_name = "battle.html"
+    context = {}
+
+    @get_game
+    def get(self, request, game: Game, imdb_id, *args, **kwargs):
+        moviemon = game.game_data.get_movie(imdb_id)
+        self.context.update(moviemon)
+        return render(request, self.template_name, self.context)
+
+
+class Select(TemplateView):
+    template_name = "select.html"
+    
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+

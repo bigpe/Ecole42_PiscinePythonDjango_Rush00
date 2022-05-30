@@ -11,7 +11,10 @@
 
 <body>
     <div class="nav">
-        <div class="nav_title">MovieMon</div>
+        <div class="nav_title">MovieMon {{ is_enemy }}</div>
+        {% if is_enemy %}
+            {{ enemy }}
+        {% endif %}
     </div>
     <div class="game">
         <div class="panel">

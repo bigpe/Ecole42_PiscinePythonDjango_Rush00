@@ -1,3 +1,4 @@
+import glob
 import pickle
 import random
 from dataclasses import dataclass, field
@@ -132,6 +133,21 @@ class GameData:
         self.map[random_y][random_x] = random.choice([Tile(Tile.Types.ball), Tile(Tile.Types.enemy)])
         self.dump('session')
 
+    def get_slots(self):
+        slots = [slot.split('/')[-1] for slot in glob.glob(str(self.save_path('session').parent / 'slot-*.bin'))]
+        slots = list(filter(lambda slot: 'session' not in slot, slots))
+        slots_ids = [slot.replace('slot-', '').replace('.bin', '') for slot in slots]
+        slots = {
+            '1': {'number': 1, 'progress': None},
+            '2': {'number': 2, 'progress': None},
+            '3': {'number': 3, 'progress': None},
+        }
+        for slot in slots_ids:
+            slot_data: GameData = self.load(slot)
+            slots[slot]['progress'] = f'{len(slot_data.moviemons)/len(slot_data.captured)}'
+        slots = [slots[slot] for slot in slots]
+        return slots
+
     def to_data(self):
         return {
             'map': [[x_tile.type for x_tile in y_tile] for y_tile in self.map],
@@ -144,6 +160,7 @@ class Game:
         self.game_data: GameData = game_data
 
     def move(self, to_y=0, to_x=0):
+        move_on = None
         y, x = self.game_data.position
         if y + to_y < 0 or x + to_x < 0:
             return
@@ -159,16 +176,17 @@ class Game:
             if not self.game_data.moves_count % 5:
                 self.game_data.restore_tile()
         except IndexError:
-            return None
+            ...
+        return move_on
 
     def move_left(self):
-        self.move(to_x=-1)
+        return self.move(to_x=-1)
 
     def move_right(self):
-        self.move(to_x=1)
+        return self.move(to_x=1)
 
     def move_up(self):
-        self.move(to_y=-1)
+        return self.move(to_y=-1)
 
     def move_down(self):
-        self.move(to_y=1)
+        return self.move(to_y=1)
