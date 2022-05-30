@@ -1,22 +1,26 @@
+html, body {
+    padding: 0;
+    margin: 0;
+}
+
 a {
     text-decoration: none;
     color: black;
 }
 
-
 .nav {
     width: 100%;
-    max-width: 840px;
+    max-width: 1200px;
     display: flex;
     justify-content: center;
     margin-left: auto;
     margin-right: auto;
     padding-left: 10px;
     padding-right: 10px;
-    background-color: #22223b;
+    background-color: #1d3557;
     padding: 20px 15px;
     align-items: center;
-    border-radius: 15px;
+    border-radius: 0 0 5px 5px;
     font-family: monospace;
 }
 
@@ -33,11 +37,11 @@ a {
 
 .game {
     width: 100%;
-    max-width: 840px;
+    max-width: 1048px;
     margin-left: auto;
     margin-right: auto;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     flex-direction: row;
     margin-top: 30px;
 }
@@ -48,26 +52,23 @@ a {
     max-width: 180px;
     display: flex;
     flex-direction: column;
-    padding: 15px;
     background-color: white;
     border-radius: 15px;
     align-content: flex-start;
 }
 
 .panel_ab_buttons {
-    width: 100%;
     max-width: 200px;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    padding: 9px;
-    border-radius: 15px;
+    padding: 15px;
+    border-radius: 5px;
     background-color: #E6E6E6;
     border-color: grey;
     border-width: 2px;
     max-height: 55px;
     align-items: center;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25);
 }
 
 .a_button {
@@ -77,7 +78,6 @@ a {
     background-color: #7D230D;
     display: flex;
     justify-content: center;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
 }
 
 .b_button {
@@ -87,7 +87,6 @@ a {
     background-color: #CFCF00;
     display: flex;
     justify-content: center;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
 }
 
 .button_name {
@@ -101,8 +100,8 @@ table {
 }
 
 td {
-    width: 55px;
-    height: 55px;
+    width: 59px;
+    height: 59px;
     background-color: cadetblue;
     text-align: center;
     font-family: monospace;
@@ -111,15 +110,13 @@ td {
 }
 
 .panel_nav_buttons {
-    width: 100%;
     display: flex;
     padding: 10px;
-    margin-top: 10px;
+    margin-top: 20px;
     flex-direction: column;
     justify-content: flex-start;
-    border-radius: 15px;
+    border-radius: 5px;
     background-color: #E6E6E6;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25);
 
 }
 
@@ -148,10 +145,9 @@ td {
 
 .start_panel {
     width: 100%;
-    margin: 12px 30px;
+    margin-left: 20px;
     background-color: #E6E6E6;
-    border-radius: 15px;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -172,4 +168,107 @@ td {
     margin: 10px;
     border-radius: 15px;
     border-color: white;
+}
+
+.player_data {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: #a5def1;
+    border-radius: 5px;
+}
+
+p {
+    font-family: monospace;
+    text-align: center;
+    font-weight: bold;
+    color: #1d3557;
+    font-size: 16px;
+}
+
+img {
+    width: 190px;
+    height: 3000px;
+}
+
+.movies {
+    width: 100%;
+    margin-left: 25;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.movie {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0 20 20 0;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+    flex: none;
+    height: 458px;
+    width: 260px;
+}
+
+.movie h2 {
+    margin: 16;
+    font-size: 17;
+    font-family: monospace;
+    font-weight: 550;
+}
+
+ul {
+    padding: 0;
+    margin: 2 0 0 0;
+}
+
+li {
+    list-style: none;
+    padding: 2;
+    color: darkslategrey
+}
+.panel_start_catch p {
+    font-family: monospace;
+    font-size: 16;
+    font-weight: bold;
+    color: white;
+}
+
+.panel_start_catch {
+    height: 100%;
+    min-height: 100px;
+    background-color: #3a7b99;
+    border-radius: 5px;
+    color: white;
+    margin-top: 20px;
+    padding: 5px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.65);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.panel_start_catch-content {
+}
+
+.movie-cover {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px 5px 0 0;
+    background-size: cover;
+    background-position: center
+}
+
+.blur {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    height: 100%;
+    border-radius: 5px;
+}
+
+.game_field {
+    margin-left: 20px;
 }

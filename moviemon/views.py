@@ -23,6 +23,13 @@ class Main(TemplateView):
         return render(request, self.template_name)
 
 
+class Select(TemplateView):
+    template_name = "select.html"
+    
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+
+
 class WorldMap(TemplateView):
     template_name = "worldmap.html"
     context = {}
