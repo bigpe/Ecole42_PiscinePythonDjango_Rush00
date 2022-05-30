@@ -10,7 +10,7 @@ a {
 
 .nav {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1100px;
     display: flex;
     justify-content: center;
     margin-left: auto;
@@ -177,6 +177,7 @@ td {
     justify-content: center;
     background-color: #a5def1;
     border-radius: 5px;
+    padding: 4px;
 }
 
 p {
@@ -184,7 +185,14 @@ p {
     text-align: center;
     font-weight: bold;
     color: #1d3557;
+    font-size: 14px;
+}
+
+
+
+.catch_description p {
     font-size: 16px;
+    margin: 10px;
 }
 
 img {
@@ -196,7 +204,7 @@ img {
     width: 100%;
     margin-left: 25;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     flex-direction: row;
     justify-content: flex-start;
 }
@@ -228,12 +236,17 @@ ul {
 li {
     list-style: none;
     padding: 2;
-    color: darkslategrey
+    color: darkslategrey;
+    font-kerning: normal;
+    font-family: monospace;
+    font-size: 17px;
 }
 .panel_start_catch p {
     font-family: monospace;
-    font-size: 16;
+    font-size: 15px;
     font-weight: bold;
+    margin: 0;
+    padding: 5px;
     color: white;
 }
 
@@ -245,13 +258,17 @@ li {
     color: white;
     margin-top: 20px;
     padding: 5px;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.65);
+    box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.75);
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
 .panel_start_catch-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .movie-cover {
@@ -271,4 +288,52 @@ li {
 
 .game_field {
     margin-left: 20px;
+}
+
+.player {
+    background-image: url(https://art.pixilart.com/2472449368bf921.png);
+    background-size: cover;
+    height: 300px;
+    width: 200px;
+    margin-left: 30px;
+    background-position: center;
+}
+
+.catch_panel {
+    width: 100%;
+    margin-left: 20px;
+    background-color: #E6E6E6;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.movie-cover_catch {
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+    flex: none;
+    height: 300px;
+    width: 200px;
+    margin-right: 30px;
+    background-position: center;
+    background-size: cover;
+}
+
+.catch_description {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+hr {
+    width: 100%;
+    margin: 0;
+}
+
+.control {
+    margin-top: 30px;
+    display: flex;
+    color: darkgray;
 }
