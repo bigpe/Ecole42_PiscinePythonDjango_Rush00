@@ -1,3 +1,4 @@
+import random
 from typing import Callable
 
 from django.http import HttpResponse
@@ -68,12 +69,12 @@ class WorldMap(TemplateView):
 
         event_message = None
         if move_on == Tile.Types.ball:
-            event_message = 'Your get +1 movieball'
+            event_message = 'You get +1 movieball'
         if move_on == Tile.Types.enemy or self.context['enemy_block']:
-            event_message = '<div>Your find moviemon<br>' \
+            event_message = '<div>You find moviemon<br>' \
                             'Press <span>A</span> to start fighting</div>'
         if move_on == Tile.Types.radar:
-            event_message = 'Your obtain radar, now you see better, for a limited time'
+            event_message = 'You obtain radar, now you see better, for a limited time'
             game_data.activate_radar()
             game_data.show_map()
         if request.GET.get('escape', False):
@@ -147,7 +148,19 @@ class BattleView(TemplateView):
     @get_game
     def get(self, request, game: Game, imdb_id, *args, **kwargs):
         moviemon = game.game_data.get_movie(imdb_id)
-        context = {'enemy': moviemon, 'movie_balls': game.game_data.movie_balls}
+        success_rate = 50 - (moviemon['imdbRating'] * 10) + (game.game_data.get_strength * 5)
+        if success_rate <= 0:
+            success_rate = 1
+        if success_rate >= 100:
+            success_rate = 90
+        success_rate = int(success_rate)
+        context = {
+            'enemy': moviemon,
+            'movie_balls': game.game_data.movie_balls,
+            'message': request.GET.get('message'),
+            'strength': game.game_data.get_strength,
+            'success_rate': success_rate
+        }
         return render(request, self.template_name, context)
 
 
@@ -198,6 +211,21 @@ class MoviemonDetailView(TemplateView):
 class CatchView(View):
     @get_game
     def get(self, request, game: Game, imdb_id, *args, **kwargs):
-        game.game_data.captured.append(game.game_data.get_movie(imdb_id))
-        game.game_data.dump('session')
-        return redirect('/worldmap/?win=1')
+        if game.game_data.movie_balls:
+            game.game_data.movie_balls -= 1
+            game.game_data.dump('session')
+        else:
+            return redirect(f'/worldmap/?escape=1')
+        enemy = game.game_data.get_movie(imdb_id)
+        success_rate = 50 - (enemy['imdbRating'] * 10) + (game.game_data.get_strength * 5)
+        if success_rate <= 0:
+            success_rate = 1
+        if success_rate >= 100:
+            success_rate = 90
+        success_rate = int(success_rate)
+        roll = [True] * success_rate + [False] * (100 - success_rate)
+        if random.choice(roll):
+            game.game_data.captured.append(enemy)
+            game.game_data.dump('session')
+            return redirect(f'/worldmap/?win=1')
+        return redirect(f'/battle/{imdb_id}/?message=You missed')

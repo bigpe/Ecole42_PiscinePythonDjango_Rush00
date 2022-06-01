@@ -21,7 +21,7 @@ class Tile:
     type: str
     seen: bool = False
     highlight: bool = False
-    highlight_state: bool = 0
+    highlight_state: int = 0
 
     def highlight_decrease(self):
         if self.highlight_state:
@@ -115,7 +115,7 @@ class GameData:
 
     @property
     def get_strength(self):
-        return len(self.moviemons)
+        return sum([moviemon['imdbRating'] for moviemon in self.captured])
 
     def get_movie(self, imdb_id):
         return next(filter(lambda moviemoon: moviemoon.imdbID == imdb_id, self.moviemons)).to_data()
@@ -126,7 +126,7 @@ class GameData:
             tiles = []
             for j in range(map_size):
                 tiles.append(Tile(type=random.choice(
-                    [Tile.Types.empty, Tile.Types.ball, Tile.Types.radar]
+                    [Tile.Types.empty, Tile.Types.ball, Tile.Types.radar, Tile.Types.enemy]
                 ) if (i, j) != settings.PLAYER_START_POSITION else Tile.Types.player))
             self.map.append(tiles)
 
@@ -223,7 +223,7 @@ class Game:
             if move_on == Tile.Types.ball:
                 self.game_data.movie_balls += 1
             self.game_data.map[y + to_y][x + to_x] = Tile(type=Tile.Types.player)
-            self.game_data.map[y][x] = Tile(type=Tile.Types.empty)
+            self.game_data.map[y][x] = Tile(type=Tile.Types.empty, highlight_state=5, highlight=True)
             self.game_data.position = (y + to_y, x + to_x)
             self.game_data.moves_count += 1
             if self.game_data.radar_moves_count:
