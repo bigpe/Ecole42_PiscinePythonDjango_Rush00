@@ -16,9 +16,16 @@ class Tile:
         enemy = 'enemy'
         ball = 'ball'
         player = 'player'
+        radar = 'radar'
 
     type: str
     seen: bool = False
+    highlight: bool = False
+    highlight_state: bool = 0
+
+    def highlight_decrease(self):
+        if self.highlight_state:
+            self.highlight_state -= 1
 
 
 class API:
@@ -34,7 +41,6 @@ class API:
 
     @staticmethod
     def send_request(url):
-        # key = 'c29c9750'
         key = settings.OMDB_API_KEY
         config = {
             'params': {'apikey': key}
@@ -79,6 +85,7 @@ class GameData:
     captured: List[Moviemon] = field(default_factory=list)
     movie_balls: int = settings.PLAYER_START_MOVIE_BALLS
     map: List[List[Tile]] = field(default_factory=list)
+    radar_moves_count = 0
     moves_count = 0
 
     def load(self, slot):
@@ -92,10 +99,13 @@ class GameData:
         pickle.dump(self, open(save_path(slot), 'wb'))
 
     def get_random_movie(self):
-        moviemons_ids = [moviemoon.imdbID for moviemoon in self.moviemons]
-        [moviemons_ids.pop(i) if moviemoon in self.captured else ... for i, moviemoon in enumerate(moviemons_ids)]
-        random_moviemoon_id = random.choice(moviemons_ids)
-        return next(filter(lambda moviemoon: moviemoon.imdbID == random_moviemoon_id, self.moviemons))
+        moviemons_ids = {moviemoon.imdbID for moviemoon in self.moviemons}
+        captured_ids = {moviemoon['imdbID'] for moviemoon in self.captured}
+        not_exist_ids = moviemons_ids - captured_ids
+        if not not_exist_ids:
+            return None
+        random_moviemoon_id = random.choice(list(not_exist_ids))
+        return self.get_movie(random_moviemoon_id)
 
     def load_default_settings(self):
         self.generate_map()
@@ -116,7 +126,7 @@ class GameData:
             tiles = []
             for j in range(map_size):
                 tiles.append(Tile(type=random.choice(
-                    [Tile.Types.empty, Tile.Types.ball, Tile.Types.enemy]
+                    [Tile.Types.empty, Tile.Types.ball, Tile.Types.radar]
                 ) if (i, j) != settings.PLAYER_START_POSITION else Tile.Types.player))
             self.map.append(tiles)
 
@@ -157,10 +167,44 @@ class GameData:
         slots = [slots[slot] for slot in slots]
         return slots
 
+    def activate_radar(self):
+        self.radar_moves_count = 3
+
+    def show_map(self):
+        self.radar_moves_count -= 1
+        y, x = self.position
+        try:
+            self.map[y + 1][x].seen = True
+            self.map[y + 1][x].highlight = True
+            self.map[y + 1][x].highlight_state = 5
+        except:
+            ...
+        try:
+            self.map[y - 1][x].seen = True
+            self.map[y - 1][x].highlight = True
+            self.map[y - 1][x].highlight_state = 5
+        except:
+            ...
+        try:
+            self.map[y][x + 1].seen = True
+            self.map[y][x + 1].highlight = True
+            self.map[y][x + 1].highlight_state = 5
+        except:
+            ...
+        try:
+            self.map[y][x - 1].seen = True
+            self.map[y][x - 1].highlight = True
+            self.map[y][x - 1].highlight_state = 5
+        except:
+            ...
+        self.dump('session')
+
     def to_data(self):
         return {
-            'map': [[x_tile.type for x_tile in y_tile] for y_tile in self.map],
+            'map': [[x_tile for x_tile in y_tile] for y_tile in self.map],
             'movie_balls': self.movie_balls,
+            'y': self.position[0],
+            'x': self.position[1]
         }
 
 
@@ -174,6 +218,7 @@ class Game:
         if y + to_y < 0 or x + to_x < 0:
             return
         try:
+            [[x_tile.highlight_decrease() for x_tile in y_tile] for y_tile in self.game_data.map]
             move_on = self.game_data.map[y + to_y][x + to_x].type
             if move_on == Tile.Types.ball:
                 self.game_data.movie_balls += 1
@@ -181,6 +226,8 @@ class Game:
             self.game_data.map[y][x] = Tile(type=Tile.Types.empty)
             self.game_data.position = (y + to_y, x + to_x)
             self.game_data.moves_count += 1
+            if self.game_data.radar_moves_count:
+                self.game_data.show_map()
             self.game_data.dump('session')
             if not self.game_data.moves_count % 5:
                 self.game_data.restore_tile()

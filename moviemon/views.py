@@ -1,5 +1,6 @@
 from typing import Callable
 
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, View
 
@@ -9,12 +10,9 @@ from .signatures import GameData, Game, Tile, Moviemon
 def get_game(f: Callable):
     def wrapper(self, request, *args, **kwargs):
         slot = request.GET.get('slot', 'session')
-        not_load = request.GET.get('temp', False)
         new_game = request.GET.get('new_game', False)
         if new_game:
             GameData.flush_session()
-        if not_load:
-            slot = 'session'
         game_data = GameData().load(slot)
         game = Game(game_data)
         game_data.dump('session')
@@ -46,43 +44,50 @@ class Main(TemplateView):
 
 class WorldMap(TemplateView):
     template_name = "worldmap.html"
-    context = {'enemy_block': False, 'event': None, 'enemy': None}
+    context = {'enemy_block': False, 'event': None, 'enemy': None, 'radar': False}
 
     @get_game
     def get(self, request, game: Game, *args, **kwargs):
         move = request.GET.get('move', None)
-        slot = request.GET.get('slot', None)
         game_data: GameData = game.game_data
         move_on = None
         context = {}
-        flush_state = request.GET.get('flush_state', False)
-        if flush_state:
-            self.context = {'enemy_block': False, 'event': None, 'enemy': None}
-        if slot:
-            self.context.update({'slot': slot})
-        if self.context.get('enemy_block', False) and game_data.moves_count:
-            context.update(game_data.to_data())
-            context.update(self.context)
-            return render(request, self.template_name, context)
-        if move:
+        context.update({'progress': f'{len(game.game_data.captured)}/{len(game.game_data.moviemons)}'})
+        if len(game.game_data.captured) == len(game.game_data.moviemons):
+            game_data.flush_session()
+            # TODO Win logic
+        if request.GET.get('flush_state', False):
+            self.context.update({'enemy_block': False, 'event': None, 'enemy': None})
+        if request.GET.get('escape', False) or request.GET.get('win', False):
+            self.context.update({'enemy_block': False, 'enemy': None})
+        if move and not self.context['enemy_block']:
             move_on = getattr(game, f'move_{move}', lambda: ...)()
-        context.update(game_data.to_data())
-        self.context.update({
-            'enemy_block': True if move_on == Tile.Types.enemy else False,
-        })
+            self.context.update({
+                'enemy_block': True if move_on == Tile.Types.enemy else False,
+            })
 
         event_message = None
         if move_on == Tile.Types.ball:
             event_message = 'Your get +1 movieball'
-        if move_on == Tile.Types.enemy:
+        if move_on == Tile.Types.enemy or self.context['enemy_block']:
             event_message = '<div>Your find moviemon<br>' \
                             'Press <span>A</span> to start fighting</div>'
+        if move_on == Tile.Types.radar:
+            event_message = 'Your obtain radar, now you see better, for a limited time'
+            game_data.activate_radar()
+            game_data.show_map()
+        if request.GET.get('escape', False):
+            event_message = 'You escape from battle'
+        if request.GET.get('win', False):
+            event_message = 'You obtain new moviemon'
         self.context.update({
             'event': event_message
         })
         if self.context['enemy_block']:
             self.context.update({'enemy': game_data.get_random_movie()})
-        context.update(self.context)
+        self.context['radar'] = True if game_data.radar_moves_count else False
+        context.update(game_data.to_data())
+        context.update(**self.context)
         return render(request, self.template_name, context)
 
 
@@ -152,7 +157,7 @@ class MoviemonsView(TemplateView):
         'selected': 1,
         'selected_moviemon': Moviemon(),
         'moviemons': [],
-        'moviemons_count': 0
+        'moviemons_count': 0,
     }
 
     @get_game
@@ -188,3 +193,11 @@ class MoviemonDetailView(TemplateView):
     def get(self, request, game: Game, imdb_id, *args, **kwargs):
         self.context.update({'selected_moviemon': game.game_data.get_movie(imdb_id)})
         return render(request, self.template_name, self.context)
+
+
+class CatchView(View):
+    @get_game
+    def get(self, request, game: Game, imdb_id, *args, **kwargs):
+        game.game_data.captured.append(game.game_data.get_movie(imdb_id))
+        game.game_data.dump('session')
+        return redirect('/worldmap/?win=1')

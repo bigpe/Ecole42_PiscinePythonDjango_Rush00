@@ -368,3 +368,19 @@ tr:first-child td:first-child{
 tr:first-child td:last-child{
     border-top-right-radius: 50%;
 }
+
+.highlighted-1 {
+    background-color: #7bc9cb !important;
+}
+.highlighted-2 {
+    background-color: rgba(123, 201, 203, 0.84) !important;
+}
+.highlighted-3 {
+    background-color: rgba(123, 201, 203, 0.58) !important;
+}
+.highlighted-4 {
+    background-color: rgba(123, 201, 203, 0.31) !important;
+}
+.highlighted-5 {
+    background-color: rgba(123, 201, 203, 0.16) !important;
+}
