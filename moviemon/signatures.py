@@ -76,7 +76,7 @@ def save_path(slot):
 class GameData:
     moviemons: List[Moviemon] = field(default_factory=list)
     position: Tuple[int, int] = settings.PLAYER_START_POSITION
-    captured: List[str] = field(default_factory=list)
+    captured: List[Moviemon] = field(default_factory=list)
     movie_balls: int = settings.PLAYER_START_MOVIE_BALLS
     map: List[List[Tile]] = field(default_factory=list)
     moves_count = 0

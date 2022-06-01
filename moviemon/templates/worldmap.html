@@ -17,7 +17,7 @@
     <div class="panel">
         <div class="panel_ab_buttons">
             <button class="a_button">
-                <div class="button_name">A</div>
+                <div class="button_name"><a href="{% if enemy %}/battle/{{ enemy.imdbID }}/{% else %} {% endif %}">A</a></div>
             </button>
             <button class="b_button">
                 <div class="button_name"><a href="/">B</a></div>

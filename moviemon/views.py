@@ -42,7 +42,7 @@ class Main(TemplateView):
 
 class WorldMap(TemplateView):
     template_name = "worldmap.html"
-    context = {'enemy_block': False, 'event': None}
+    context = {'enemy_block': False, 'event': None, 'enemy': None}
 
     @get_game
     def get(self, request, game: Game, *args, **kwargs):
@@ -52,7 +52,7 @@ class WorldMap(TemplateView):
         context = {}
         new_game = request.GET.get('new_game', False)
         if new_game:
-            self.context = {'enemy_block': False, 'event': None}
+            self.context = {'enemy_block': False, 'event': None, 'enemy': None}
         if self.context.get('enemy_block', False) and game_data.moves_count:
             context.update(game_data.to_data())
             context.update(self.context)
@@ -74,7 +74,7 @@ class WorldMap(TemplateView):
             'event': event_message
         })
         if self.context['enemy_block']:
-            context.update({'enemy': game_data.get_random_movie().to_data()})
+            self.context.update({'enemy': game_data.get_random_movie()})
         context.update(self.context)
         return render(request, self.template_name, context)
 
@@ -102,15 +102,14 @@ class Load(TemplateView):
         return render(request, self.template_name, self.context)
 
 
-class Battle(TemplateView):
+class BattleView(TemplateView):
     template_name = "battle.html"
-    context = {}
 
     @get_game
     def get(self, request, game: Game, imdb_id, *args, **kwargs):
         moviemon = game.game_data.get_movie(imdb_id)
-        self.context.update(moviemon)
-        return render(request, self.template_name, self.context)
+        context = {'enemy': moviemon, 'movie_balls': game.game_data.movie_balls}
+        return render(request, self.template_name, context)
 
 
 class MoviemonsView(TemplateView):
@@ -130,9 +129,11 @@ class MoviemonsView(TemplateView):
             'right': +1,
         }
 
-        moviemons = game.game_data.moviemons
+        moviemons = game.game_data.captured
 
         self.context['moviemons_count'] = len(moviemons)
+        if not moviemons:
+            return render(request, self.template_name, self.context)
 
         if self.context['selected'] >= len(moviemons):
             self.context['selected'] = 0
@@ -153,9 +154,3 @@ class MoviemonDetailView(TemplateView):
     def get(self, request, game: Game, imdb_id, *args, **kwargs):
         self.context.update({'selected_moviemon': game.game_data.get_movie(imdb_id)})
         return render(request, self.template_name, self.context)
-
-
-class NewGameView(View):
-    def get(self, *args, **kwargs):
-        GameData.flush_session()
-        return redirect('/worldmap/?new_game=1')
