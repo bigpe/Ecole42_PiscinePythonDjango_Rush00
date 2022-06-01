@@ -116,7 +116,7 @@ class GameData:
             tiles = []
             for j in range(map_size):
                 tiles.append(Tile(type=random.choice(
-                    [Tile.Types.empty, Tile.Types.ball, Tile.Types.enemy]
+                    [Tile.Types.empty, Tile.Types.ball]
                 ) if (i, j) != settings.PLAYER_START_POSITION else Tile.Types.player))
             self.map.append(tiles)
 
@@ -153,7 +153,7 @@ class GameData:
         }
         for slot in slots_ids:
             slot_data: GameData = self.load(slot)
-            slots[slot]['progress'] = f'{len(slot_data.moviemons) / len(slot_data.captured)}'
+            slots[slot]['progress'] = f'{len(slot_data.captured)}/{len(slot_data.moviemons)}'
         slots = [slots[slot] for slot in slots]
         return slots
 

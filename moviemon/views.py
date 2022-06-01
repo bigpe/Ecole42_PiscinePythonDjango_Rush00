@@ -9,11 +9,15 @@ from .signatures import GameData, Game, Tile, Moviemon
 def get_game(f: Callable):
     def wrapper(self, request, *args, **kwargs):
         slot = request.GET.get('slot', 'session')
+        not_load = request.GET.get('temp', False)
         new_game = request.GET.get('new_game', False)
         if new_game:
             GameData.flush_session()
+        if not_load:
+            slot = 'session'
         game_data = GameData().load(slot)
         game = Game(game_data)
+        game_data.dump('session')
         return f(self, request, game, *args, **kwargs)
 
     return wrapper
@@ -47,12 +51,15 @@ class WorldMap(TemplateView):
     @get_game
     def get(self, request, game: Game, *args, **kwargs):
         move = request.GET.get('move', None)
+        slot = request.GET.get('slot', None)
         game_data: GameData = game.game_data
         move_on = None
         context = {}
-        new_game = request.GET.get('new_game', False)
-        if new_game:
+        flush_state = request.GET.get('flush_state', False)
+        if flush_state:
             self.context = {'enemy_block': False, 'event': None, 'enemy': None}
+        if slot:
+            self.context.update({'slot': slot})
         if self.context.get('enemy_block', False) and game_data.moves_count:
             context.update(game_data.to_data())
             context.update(self.context)
@@ -97,6 +104,33 @@ class Load(TemplateView):
             self.context['selected'] = 1
         if self.context['selected'] < 1:
             self.context['selected'] = 3
+
+        self.context.update({'slots': game.game_data.get_slots()})
+        return render(request, self.template_name, self.context)
+
+
+class Save(TemplateView):
+    template_name = "save.html"
+    context = {"selected": 1}
+
+    @get_game
+    def get(self, request, game: Game, *args, **kwargs):
+        move = request.GET.get('move', None)
+        to_slot = request.GET.get('to_slot', None)
+        move_handler = {
+            'up': -1,
+            'down': +1,
+        }
+
+        self.context['selected'] += move_handler.get(move, 0)
+
+        if self.context['selected'] > 3:
+            self.context['selected'] = 1
+        if self.context['selected'] < 1:
+            self.context['selected'] = 3
+
+        if to_slot:
+            game.game_data.dump(to_slot)
 
         self.context.update({'slots': game.game_data.get_slots()})
         return render(request, self.template_name, self.context)
