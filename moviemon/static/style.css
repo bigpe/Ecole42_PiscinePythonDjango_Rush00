@@ -369,18 +369,19 @@ tr:first-child td:last-child{
     border-top-right-radius: 50%;
 }
 
-.highlighted-1 {
-    background-color: #7bc9cb !important;
-}
-.highlighted-2 {
-    background-color: rgba(123, 201, 203, 0.84) !important;
-}
-.highlighted-3 {
-    background-color: rgba(123, 201, 203, 0.58) !important;
+.highlighted-5 {
+    background-color: crimson !important;
 }
 .highlighted-4 {
-    background-color: rgba(123, 201, 203, 0.31) !important;
+    background-color: rgba(220, 20, 60, 0.82) !important;
 }
-.highlighted-5 {
-    background-color: rgba(123, 201, 203, 0.16) !important;
+.highlighted-3 {
+    background-color: rgba(220, 20, 60, 0.63) !important;
 }
+.highlighted-2 {
+    background-color: rgba(220, 20, 60, 0.4) !important;
+}
+.highlighted-1 {
+    background-color: rgba(220, 20, 60, 0.14) !important;
+}
+
