@@ -116,7 +116,7 @@ class GameData:
             tiles = []
             for j in range(map_size):
                 tiles.append(Tile(type=random.choice(
-                    [Tile.Types.empty, Tile.Types.ball]
+                    [Tile.Types.empty, Tile.Types.ball, Tile.Types.enemy]
                 ) if (i, j) != settings.PLAYER_START_POSITION else Tile.Types.player))
             self.map.append(tiles)
 
