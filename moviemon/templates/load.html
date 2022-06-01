@@ -1,54 +1,58 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
-    <div class="nav">
-        <div class="nav_title">MovieMon</div>
-    </div>
-    <div class="game">
-        <div class="panel">
-            <div class="panel_ab_buttons">
-                <button class="a_button">
-                    <div class="button_name">A</div>
-                </button>
-                <button class="b_button">
-                    <div class="button_name">B</div>
-                </button>
+<div class="nav">
+    <div class="nav_title">MovieMon</div>
+</div>
+<div class="game">
+    <div class="panel">
+        <div class="panel_ab_buttons">
+            <button class="a_button">
+                <div class="button_name"><a href="/worldmap/?slot={{ selected }}">A</a></div>
+            </button>
+            <button class="b_button">
+                <div class="button_name"><a href="/">B</a></div>
+            </button>
+        </div>
+        <div class="panel_nav_buttons">
+            <div class="nav_button_wrapper">
+                <button class="nav_button"><a href="?move=up">UP</a></button>
             </div>
-            <div class="panel_nav_buttons">
-                <div class="nav_button_wrapper">
-                    <button class="nav_button">UP</button>
-                </div>
-                <div class="nav_button_wrapper">
-                    <button class="nav_button">LEFT</button>
-                    <button class="nav_button">RIGHT</button>
-                </div>
-                <div class="nav_button_wrapper">
-                    <button class="nav_button">DOWN</button>
-                </div>
+            <div class="nav_button_wrapper">
+                <button class="nav_button">LEFT</button>
+                <button class="nav_button">RIGHT</button>
             </div>
-            <div class="panel_nav_buttons">
-               <div class="nav_button_wrapper">
+            <div class="nav_button_wrapper">
+                <button class="nav_button"><a href="?move=down">DOWN</a></button>
+            </div>
+        </div>
+        <div class="panel_nav_buttons">
+            <div class="nav_button_wrapper">
                 <button class="other_button select">SELECT</button>
-                </div>
-                <div class="nav_button_wrapper">
+            </div>
+            <div class="nav_button_wrapper">
                 <button class="other_button start">START</button>
-                </div>
             </div>
         </div>
-        <div class="start_panel">
-            {% for slot in slots %}
-                {% if slot %}
-                    <button class="save_game_button"><a href="/worldmap/?slot={{ slot.number }}">{{ slot.number }} ({{ slot.progress }})</a></button>
-                {% else %}
-                    <button class="save_game_button"> - </button>
-                {% endif %}
-            {% endfor %}
-        </div>
     </div>
+    <div class="start_panel">
+        {% for slot in slots %}
+            {% if slot %}
+                <button class="save_game_button {% if forloop.counter == selected %}selected{% endif %}">
+                    {{ slot.number }} ({{ slot.progress }})
+                </button>
+            {% else %}
+                <button class="save_game_button"> -</button>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
 </body>
 </html>

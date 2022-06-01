@@ -1,4 +1,5 @@
 import glob
+import os
 import pickle
 import random
 from dataclasses import dataclass, field
@@ -52,14 +53,23 @@ class Moviemon:
     Actors: str
 
     def __init__(self, **kwargs):
-        self.__dict__.update(**kwargs)
-        self.imdbRating = float(self.imdbRating)
+        try:
+            self.__dict__.update(**kwargs)
+            self.imdbRating = float(self.imdbRating)
+        except Exception:
+            ...
 
     def __str__(self):
         return self.Title
 
     def to_data(self):
         return self.__dict__
+
+
+def save_path(slot):
+    saved_data_folder = settings.BASE_DIR.parent / 'saved_data'
+    saved_data_folder.mkdir(exist_ok=True)
+    return saved_data_folder / f'slot-{slot}.bin'
 
 
 @dataclass
@@ -73,19 +83,13 @@ class GameData:
 
     def load(self, slot):
         try:
-            load_data = pickle.load(open(self.save_path(slot), 'rb'))
+            load_data = pickle.load(open(save_path(slot), 'rb'))
         except FileNotFoundError:
             load_data = self.load_default_settings()
         return load_data
 
     def dump(self, slot):
-        pickle.dump(self, open(self.save_path(slot), 'wb'))
-
-    @staticmethod
-    def save_path(slot):
-        saved_data_folder = settings.BASE_DIR.parent / 'saved_data'
-        saved_data_folder.mkdir(exist_ok=True)
-        return saved_data_folder / f'slot-{slot}.bin'
+        pickle.dump(self, open(save_path(slot), 'wb'))
 
     def get_random_movie(self):
         moviemons_ids = [moviemoon.imdbID for moviemoon in self.moviemons]
@@ -124,6 +128,11 @@ class GameData:
     def create_session(self):
         self.dump('session')
 
+    @staticmethod
+    def flush_session():
+        if os.path.exists(save_path('session')):
+            os.remove(save_path('session'))
+
     def restore_tile(self, x=None, y=None):
         random_y = random.randint(0, settings.MAP_SIZE - 1) if y is None else y
         random_x = random.randint(0, settings.MAP_SIZE - 1) if x is None else x
@@ -134,7 +143,7 @@ class GameData:
         self.dump('session')
 
     def get_slots(self):
-        slots = [slot.split('/')[-1] for slot in glob.glob(str(self.save_path('session').parent / 'slot-*.bin'))]
+        slots = [slot.split('/')[-1] for slot in glob.glob(str(save_path('session').parent / 'slot-*.bin'))]
         slots = list(filter(lambda slot: 'session' not in slot, slots))
         slots_ids = [slot.replace('slot-', '').replace('.bin', '') for slot in slots]
         slots = {
@@ -144,7 +153,7 @@ class GameData:
         }
         for slot in slots_ids:
             slot_data: GameData = self.load(slot)
-            slots[slot]['progress'] = f'{len(slot_data.moviemons)/len(slot_data.captured)}'
+            slots[slot]['progress'] = f'{len(slot_data.moviemons) / len(slot_data.captured)}'
         slots = [slots[slot] for slot in slots]
         return slots
 

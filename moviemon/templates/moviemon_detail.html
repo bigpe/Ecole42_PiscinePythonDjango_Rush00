@@ -1,9 +1,11 @@
+{% load static %}
+
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 
 <body>
@@ -17,7 +19,7 @@
                     <div class="button_name">A</div>
                 </button>
                 <button class="b_button">
-                    <div class="button_name">B</div>
+                    <div class="button_name"><a href="/moviemons/">B</a></div>
                 </button>
             </div>
             <div class="panel_nav_buttons">
@@ -46,23 +48,23 @@
         </div>
         <div class="movies">
             <div class="movie">
-                <div class="movie-cover" style="background-image: url(https://alternativemovieposters.com/wp-content/uploads/2015/12/zoltan_force.jpg)"></div>
-                <h2>Some movie</h2>
+                <div class="movie-cover" style="background-image: url({{ selected_moviemon.Poster }})"></div>
+                <h2>{{ selected_moviemon.Title }}</h2>
             </div>
-            <div class="movie">
-                <div class="movie-cover" style="background-image: url(https://i.pinimg.com/originals/d5/ed/4c/d5ed4cdd5d5ab0656e8a6a156d1aeff9.jpg)">
-                    <div class="blur"></div>
-                </div>
-                <h2>Some movie</h2>
+            <div class="movie_detail">
+                <ul>
+                    <li>Writer: <b>{{ selected_moviemon.Writer }}</b></li>
+                    <li>Director: <b>{{ selected_moviemon.Director }}</b></li>
+                    <li>Actors: <b>{{ selected_moviemon.Actors }}</b></li>
+                    <li>Year: <b>{{ selected_moviemon.Year }}</b></li>
+                    <li>Rating: <b>{{ selected_moviemon.imdbRating }}</b></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li><span>{{ selected_moviemon.Plot }}</span>
+                    </li>
+                </ul>
             </div>
-            <div class="movie">
-                <div class="movie-cover" style="background-image: url(https://i.pinimg.com/originals/36/f5/df/36f5df82520798e520dfe346ad123d29.jpg)">
-                    <div class="blur"></div>
-                </div>
-                <h2>Some movie</h2>
-            </div>
-
-
         </div>
     </div>
 </body></html>
