@@ -193,7 +193,10 @@ class MoviemonsView(TemplateView):
             self.context['selected'] = len(moviemons)
 
         self.context['selected'] += move_handler.get(move, 0)
-        self.context['selected_moviemon'] = moviemons[self.context['selected'] - 1]
+        try:
+            self.context['selected_moviemon'] = moviemons[self.context['selected'] - 1]
+        except IndexError:
+            self.context['selected_moviemon'] = moviemons[self.context['selected'] - 2]
         self.context.update({'moviemons': moviemons[self.context['selected'] - 1:len(moviemons)]})
         return render(request, self.template_name, self.context)
 
