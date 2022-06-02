@@ -348,7 +348,10 @@ hr {
     background-color: rgba(95, 158, 160, 0.2);
     margin-left: 22px;
     margin-right: 2px;
+    margin-top: 10px;
+    border-radius: 5px;
     text-align: center;
+    font-family: monospace;
 }
 #event_field span {
     border: 1px solid black;
@@ -361,11 +364,19 @@ hr {
 }
 
 tr:first-child td:first-child{
-    border-top-left-radius: 50%;
+    border-top-left-radius: 10%;
 }
 
 tr:first-child td:last-child{
-    border-top-right-radius: 50%;
+    border-top-right-radius: 10%;
+}
+
+tr:last-child td:first-child{
+    border-bottom-left-radius: 10%;
+}
+
+tr:last-child td:last-child{
+    border-bottom-right-radius: 10%;
 }
 
 .highlighted-1 {
