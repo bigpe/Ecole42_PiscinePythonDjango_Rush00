@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <title>Document</title>
     <link rel="stylesheet" href="/static/style.css">
+    <script type="text/javascript" src="{% static 'buttons.js' %}"></script>
 </head>
 
 <body>
@@ -25,19 +26,19 @@
             </div>
             <div class="panel_nav_buttons">
                 <div class="nav_button_wrapper">
-                    <button class="nav_button"><a href="/worldmap/?move=up">UP</a></button>
+                    <button class="nav_button"><a id="control-up" href="/worldmap/?move=up">UP</a></button>
                 </div>
                 <div class="nav_button_wrapper">
-                    <button class="nav_button"><a href="/worldmap/?move=left">LEFT</a></button>
-                    <button class="nav_button"><a href="/worldmap/?move=right">RIGHT</a></button>
+                    <button class="nav_button"><a id="control-left" href="/worldmap/?move=left">LEFT</a></button>
+                    <button class="nav_button"><a id="control-right" href="/worldmap/?move=right">RIGHT</a></button>
                 </div>
                 <div class="nav_button_wrapper">
-                    <button class="nav_button"><a href="/worldmap/?move=down">DOWN</a></button>
+                    <button class="nav_button"><a id="control-down" href="/worldmap/?move=down">DOWN</a></button>
                 </div>
             </div>
             <div class="panel_nav_buttons">
                <div class="nav_button_wrapper">
-                <button class="other_button"><a href="/select">SELECT</a></button>
+                <button class="other_button"><a id="control-select" href="/select">SELECT</a></button>
                 </div>
                 <div class="nav_button_wrapper">
                 <button class="other_button">START</button>
