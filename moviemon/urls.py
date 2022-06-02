@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import Main, WorldMap, MoviemonsView, Load, Save, BattleView, MoviemonDetailView, CatchView
+from .views import Main, WorldMap, MoviemonsView, Load, Save, BattleView, MoviemonDetailView, CatchView, WinView
 
 urlpatterns = [
     path('', Main.as_view(), name='main'),
@@ -10,4 +10,5 @@ urlpatterns = [
     path('moviemons/', MoviemonsView.as_view(), name='moviemons'),
     path('moviemon/<str:imdb_id>/', MoviemonDetailView.as_view(), name='moviemon_info'),
     path('catch/<str:imdb_id>/', CatchView.as_view(), name='catch'),
+    path('win/', WinView.as_view(), name='win')
 ]

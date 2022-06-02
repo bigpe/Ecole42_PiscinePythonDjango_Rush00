@@ -414,3 +414,31 @@ tr:last-child td:last-child{
 .bad {
     color: crimson;
 }
+
+.win_window {
+    display: flex;
+    flex-direction: column;
+    margin-top: 50px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.win_button {
+    padding: 20px;
+    border-radius: 10px;
+    border-color: #3a7b99;
+    font-family: monospace;
+    background-color: #3a7b99;
+}
+
+.win_button a {
+    color: white;
+}
+
+.win_window p {
+    font-size: 30px;
+    padding: 40px;
+    background-color: rgba(95, 158, 160, 0.2);
+    border-radius: 5px;
+}
