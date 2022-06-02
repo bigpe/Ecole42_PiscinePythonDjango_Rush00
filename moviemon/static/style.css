@@ -348,7 +348,10 @@ hr {
     background-color: rgba(95, 158, 160, 0.2);
     margin-left: 22px;
     margin-right: 2px;
+    margin-top: 10px;
+    border-radius: 5px;
     text-align: center;
+    font-family: monospace;
 }
 #event_field span {
     border: 1px solid black;
@@ -361,11 +364,19 @@ hr {
 }
 
 tr:first-child td:first-child{
-    border-top-left-radius: 50%;
+    border-top-left-radius: 10%;
 }
 
 tr:first-child td:last-child{
-    border-top-right-radius: 50%;
+    border-top-right-radius: 10%;
+}
+
+tr:last-child td:first-child{
+    border-bottom-left-radius: 10%;
+}
+
+tr:last-child td:last-child{
+    border-bottom-right-radius: 10%;
 }
 
 .highlighted-1 {
@@ -402,4 +413,32 @@ tr:first-child td:last-child{
 }
 .bad {
     color: crimson;
+}
+
+.win_window {
+    display: flex;
+    flex-direction: column;
+    margin-top: 50px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.win_button {
+    padding: 20px;
+    border-radius: 10px;
+    border-color: #3a7b99;
+    font-family: monospace;
+    background-color: #3a7b99;
+}
+
+.win_button a {
+    color: white;
+}
+
+.win_window p {
+    font-size: 30px;
+    padding: 40px;
+    background-color: rgba(95, 158, 160, 0.2);
+    border-radius: 5px;
 }

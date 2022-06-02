@@ -1,9 +1,12 @@
+{% load static %}
+
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
     <link rel="stylesheet" href="/static/style.css">
+    <script type="text/javascript" src="{% static 'buttons.js' %}"></script>
 </head>
 
 <body>
@@ -14,10 +17,10 @@
     <div class="panel">
         <div class="panel_ab_buttons">
             <button class="a_button">
-                <div class="button_name"><a href="/moviemon/{{ selected_moviemon.imdbID }}/">A</a></div>
+                <div class="button_name"><a id="control-a" href="/moviemon/{{ selected_moviemon.imdbID }}/">A</a></div>
             </button>
             <button class="b_button">
-                <div class="button_name"><a href="/worldmap/">B</a></div>
+                <div class="button_name"><a id="control-b" href="/worldmap/">B</a></div>
             </button>
         </div>
         <div class="panel_nav_buttons">
@@ -25,8 +28,8 @@
                 <button class="nav_button">UP</button>
             </div>
             <div class="nav_button_wrapper">
-                <button class="nav_button"><a href="?move=left">LEFT</a></button>
-                <button class="nav_button"><a href="?move=right">RIGHT</a></button>
+                <button class="nav_button"><a id="control-left" href="?move=left">LEFT</a></button>
+                <button class="nav_button"><a id="control-right" href="?move=right">RIGHT</a></button>
             </div>
             <div class="nav_button_wrapper">
                 <button class="nav_button">DOWN</button>

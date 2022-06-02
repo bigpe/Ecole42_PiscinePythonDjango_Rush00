@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <title>Document</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script type="text/javascript" src="{% static 'buttons.js' %}"></script>
 </head>
 
 <body>
@@ -17,30 +18,30 @@
     <div class="panel">
         <div class="panel_ab_buttons">
             <button class="a_button">
-                <div class="button_name"><a href="/catch/{{ enemy.imdbID }}/">A</a></div>
+                <div class="button_name"><a id="control-a" href="/catch/{{ enemy.imdbID }}/">A</a></div>
             </button>
             <button class="b_button">
-                <div class="button_name"><a href="/worldmap/?escape=1">B</a></div>
+                <div class="button_name"><a id="control-b" href="/worldmap/?escape=1">B</a></div>
             </button>
         </div>
         <div class="panel_nav_buttons">
             <div class="nav_button_wrapper">
-                <button class="nav_button">UP</button>
+                <button class="nav_button" id="control-up">UP</button>
             </div>
             <div class="nav_button_wrapper">
-                <button class="nav_button">LEFT</button>
-                <button class="nav_button">RIGHT</button>
+                <button class="nav_button" id="control-left">LEFT</button>
+                <button class="nav_button" id="control-right">RIGHT</button>
             </div>
             <div class="nav_button_wrapper">
-                <button class="nav_button">DOWN</button>
+                <button class="nav_button" id="control-down">DOWN</button>
             </div>
         </div>
         <div class="panel_nav_buttons">
             <div class="nav_button_wrapper">
-                <button class="other_button">SELECT</button>
+                <button class="other_button" id="control-select">SELECT</button>
             </div>
             <div class="nav_button_wrapper">
-                <button class="other_button">START</button>
+                <button class="other_button" id="control-start">START</button>
             </div>
         </div>
         <div class="player_data">

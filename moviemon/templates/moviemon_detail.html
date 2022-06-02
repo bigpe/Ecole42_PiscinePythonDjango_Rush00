@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <title>Document</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script type="text/javascript" src="{% static 'buttons.js' %}"></script>
 </head>
 
 <body>
@@ -19,7 +20,7 @@
                     <div class="button_name">A</div>
                 </button>
                 <button class="b_button">
-                    <div class="button_name"><a href="/moviemons/">B</a></div>
+                    <div class="button_name"><a id="control-b" href="/moviemons/">B</a></div>
                 </button>
             </div>
             <div class="panel_nav_buttons">
@@ -27,8 +28,8 @@
                     <button class="nav_button">UP</button>
                 </div>
                 <div class="nav_button_wrapper">
-                    <button class="nav_button"><a href="/worldmap/?move=left">LEFT</a></button>
-                    <button class="nav_button"><a href="/worldmap/?move=right">RIGHT</a></button>
+                    <button class="nav_button"><a id="control-left" href="/worldmap/?move=left">LEFT</a></button>
+                    <button class="nav_button"><a id="control-right" href="/worldmap/?move=right">RIGHT</a></button>
                 </div>
                 <div class="nav_button_wrapper">
                     <button class="nav_button">DOWN</button>

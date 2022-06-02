@@ -1,9 +1,12 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>MovieMon</title>
     <link rel="stylesheet" href="static/style.css">
+    <script type="text/javascript" src="{% static 'buttons.js' %}"></script>
 </head>
 <body>
 <div class="nav">
@@ -13,7 +16,7 @@
     <div class="panel">
         <div class="panel_ab_buttons">
             <button class="a_button">
-                <div class="button_name"><a href="{% if selected == 1 %}/worldmap/?new_game=1&flush_state=1{% else %}/load/{% endif %}">A</a>
+                <div class="button_name"><a id="control-a" href="{% if selected == 1 %}/worldmap/?new_game=1&flush_state=1{% else %}/load/{% endif %}">A</a>
                 </div>
             </button>
             <button class="b_button">
@@ -22,14 +25,14 @@
         </div>
         <div class="panel_nav_buttons">
             <div class="nav_button_wrapper">
-                <button class="nav_button"><a href="?move=up">UP</a></button>
+                <button class="nav_button"><a href="?move=up" id="control-up">UP</a></button>
             </div>
             <div class="nav_button_wrapper">
                 <button class="nav_button">LEFT</button>
                 <button class="nav_button">RIGHT</button>
             </div>
             <div class="nav_button_wrapper">
-                <button class="nav_button"><a href="?move=down">DOWN</a></button>
+                <button class="nav_button"><a href="?move=down" id="control-down">DOWN</a></button>
             </div>
         </div>
         <div class="panel_nav_buttons">

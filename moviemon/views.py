@@ -56,7 +56,7 @@ class WorldMap(TemplateView):
         context.update({'progress': f'{len(game.game_data.captured)}/{len(game.game_data.moviemons)}'})
         if len(game.game_data.captured) == len(game.game_data.moviemons):
             game_data.flush_session()
-            # TODO Win logic
+            return redirect('/win')
         if request.GET.get('flush_state', False):
             self.context.update({'enemy_block': False, 'event': None, 'enemy': None})
         if request.GET.get('escape', False) or request.GET.get('win', False):
@@ -232,3 +232,9 @@ class CatchView(View):
             game.game_data.dump('session')
             return redirect(f'/worldmap/?win=1')
         return redirect(f'/battle/{imdb_id}/?message=You missed')
+
+class WinView(TemplateView):
+    template_name = "win_page.html"
+    
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
